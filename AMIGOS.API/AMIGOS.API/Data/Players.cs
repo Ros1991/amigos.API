@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -14,7 +15,7 @@ namespace AMIGOS.API.Data
         public static List<Player> getAllPlayers(string url)
         {
             List<Player> ret = new List<Models.Player>();
-            DataSet ds = AcessData.GetData("select * from Player");
+            DataSet ds = AcessData.GetData("select * from Player order by Nickname");
 
             foreach(DataRow dr in ds.Tables[0].Rows)
             {
@@ -61,6 +62,7 @@ namespace AMIGOS.API.Data
 
         public static int updatePlayer(int id, Player plr, string URL)
         {
+            CultureInfo ptBR = new CultureInfo("pt-BR");
             DateTime dt = new DateTime();
             if (string.IsNullOrEmpty(plr.Picture))
             {
@@ -73,7 +75,7 @@ namespace AMIGOS.API.Data
 
             string commandString = "UPDATE [dbo].[Player] set ";
             commandString += "[Nickname] = '" + plr.NickName + "'";
-            commandString += ",[Birthday] = " + (!string.IsNullOrEmpty(plr.Birthday) && DateTime.TryParse(plr.Birthday, out dt)? "'" + dt.ToString("yyyy-MM-dd") + "'" : "null");
+            commandString += ",[Birthday] = " + (!string.IsNullOrEmpty(plr.Birthday) && DateTime.TryParse(plr.Birthday, ptBR, DateTimeStyles.None, out dt)? "'" + dt.ToString("yyyy-MM-dd") + "'" : "null");
             commandString += ",[Name] = " + (!string.IsNullOrEmpty(plr.Name) ? "'" + plr.Name + "'" : "null");
             commandString += ",[Email] = " + (!string.IsNullOrEmpty(plr.Email) ? "'" + plr.Email + "'" : "null");
             commandString += ",[Phone] = " + (!string.IsNullOrEmpty(plr.Phone) ? "'" + plr.Phone + "'" : "null");
@@ -89,7 +91,16 @@ namespace AMIGOS.API.Data
 
         public static int insertPlayer(Player plr, string URL)
         {
+            CultureInfo ptBR = new CultureInfo("pt-BR");
             string commandString = "";
+            if (string.IsNullOrEmpty(plr.Picture))
+            {
+                plr.Picture = "assets/images/pic.png";
+            }
+            else
+            {
+                plr.Picture = URL + plr.Picture;
+            }
 
             commandString += "INSERT INTO[dbo].[Player]([Nickname]";
             if (!string.IsNullOrEmpty(plr.Birthday)) commandString += ",[Birthday]";
@@ -102,16 +113,7 @@ namespace AMIGOS.API.Data
 
             commandString += ") VALUES ('"+plr.NickName+"'";
 
-            if (string.IsNullOrEmpty(plr.Picture))
-            {
-                plr.Picture = "assets/images/pic.png";
-            }
-            else
-            {
-                plr.Picture = URL + plr.Picture;
-            }
-
-            if (!string.IsNullOrEmpty(plr.Birthday)) commandString += ",'" + DateTime.Parse(plr.Birthday).ToString("yyyy-MM-dd") +"'";
+            if (!string.IsNullOrEmpty(plr.Birthday)) commandString += ",'" + DateTime.Parse(plr.Birthday, ptBR).ToString("yyyy-MM-dd") +"'";
             if (!string.IsNullOrEmpty(plr.Name)) commandString += ",'" + plr.Name + "'";
             if (!string.IsNullOrEmpty(plr.Email)) commandString += ",'" + plr.Email + "'";
             if (!string.IsNullOrEmpty(plr.Phone)) commandString += ",'" + plr.Phone + "'";

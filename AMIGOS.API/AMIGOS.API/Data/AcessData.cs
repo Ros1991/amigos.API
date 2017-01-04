@@ -33,7 +33,7 @@ namespace AMIGOS.API.Data
             cmd.CommandText = SQL;
             DataSet ds = new DataSet();
             conn.Open();
-            int ret = cmd.ExecuteNonQuery();
+            int ret = Convert.ToInt32(cmd.ExecuteScalar());
             conn.Close();
             return ret;
         }
