@@ -64,7 +64,7 @@ namespace AMIGOS.API.Data
         {
             CultureInfo ptBR = new CultureInfo("pt-BR");
             DateTime dt = new DateTime();
-            if (string.IsNullOrEmpty(plr.Picture))
+            if (string.IsNullOrEmpty(plr.Picture) || plr.Picture == "assets/images/pic.png")
             {
                 plr.Picture = "assets/images/pic.png";
             }

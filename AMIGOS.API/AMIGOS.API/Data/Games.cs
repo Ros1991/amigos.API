@@ -15,7 +15,7 @@ namespace AMIGOS.API.Data
         public static List<GameDay> getAllGames()
         {
             List<GameDay> ret = new List<GameDay>();
-            DataSet ds = AcessData.GetData("select top 50 * from gameday order by gameDate desc");
+            DataSet ds = AcessData.GetData("select top 3 * from gameday order by gameDate desc");
 
             foreach(DataRow dr in ds.Tables[0].Rows)
             {
