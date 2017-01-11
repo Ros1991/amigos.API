@@ -3,7 +3,8 @@ select * from game
 select * from playergame
 select * from gamesResult
 
-create view  teste123 as (
+
+create view ranking as (
 select r.id - 8 as dia, p.Nickname as Peladeiro, r.jogos, r.vitorias, r.empates, r.derrotas, r.gp, r.gc, r.pos, r.ast from (
 select gd.id, pg.player_id, count(*) as jogos, count(case pg.[time] when gr.vencedor then 1 else null end) as vitorias, count(case gr.vencedor when 0 then 1 else null end) as empates, count(case when gr.vencedor <> 0 then case when gr.vencedor <> pg.[time] then 1 else null end else null end) as derrotas, sum(pg.gols) as gp, sum(pg.golsContra) as gc, case when pg.goleiro = 1 then 'G' else '' end as pos , sum(pg.assistencias) as ast  from gameday gd inner join gamesresult gr on gd.id = gr.gameday_id inner join playergame pg on pg.game_id = gr.id
 group by gd.id, pg.player_id, pg.goleiro
@@ -47,11 +48,16 @@ sum(Empates) as Empates,
 sum(Derrotas) as Derrotas,
 sum(gc) as gc,
 count(*) as dias
-from teste123
+from ranking
 where Pos != 'G'
 group by Peladeiro
-order by 4 desc
+order by 11 desc
 
 select * from jogador
-select * from teste123
+select * from teste123 order by dia desc
+
+
+
+
+
 
