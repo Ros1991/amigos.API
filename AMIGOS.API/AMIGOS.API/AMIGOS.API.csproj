@@ -125,6 +125,7 @@
     <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\PlayersController.cs" />
     <Compile Include="Controllers\UploadFileController.cs" />
+    <Compile Include="Controllers\YearsController.cs" />
     <Compile Include="Data\AcessData.cs" />
     <Compile Include="Data\Games.cs" />
     <Compile Include="Data\Players.cs" />

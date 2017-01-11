@@ -19,9 +19,9 @@ namespace AMIGOS.API.Controllers
         }
 
         // GET: api/Games/5
-        public string Get(int id)
+        public IEnumerable<GameDay> Get(int id)
         {
-            return "value";
+            return Games.getAllGamesByYear(id);
         }
 
         // POST: api/Games

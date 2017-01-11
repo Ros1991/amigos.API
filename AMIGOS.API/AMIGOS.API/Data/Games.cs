@@ -11,11 +11,81 @@ namespace AMIGOS.API.Data
 {
     public static class Games
     {
-        
+        public static List<string> getAllYears()
+        {
+            List<string> ret = new List<string>();
+            DataSet ds = AcessData.GetData("select datepart(yyyy, gameDate) as [year] from gameday group by datepart(yyyy, gameDate) order by 1 desc");
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                ret.Add(dr["year"].ToString());
+            }
+            return ret;
+        }
+
+
+        public static List<GameDay> getAllGamesByYear(int year)
+        {
+            List<GameDay> ret = new List<GameDay>();
+            DataSet ds = AcessData.GetData("select * from gameday where YEAR(gamedate) = " + year + " order by gameDate desc");
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                GameDay gDay = new GameDay();
+                gDay.id = Convert.ToInt32(dr["id"]);
+                gDay.gameDate = Convert.ToDateTime(dr["gamedate"]).ToString("dd/MM/yyyy");
+                List<Game> jogosFinalizados = new List<Game>();
+                DataSet ds2 = AcessData.GetData("select * from game where gameday_id = " + gDay.id + " order by id");
+                foreach (DataRow dr2 in ds2.Tables[0].Rows)
+                {
+                    Game g = new Game();
+                    g.id = Convert.ToInt32(dr2["id"]);
+                    g.numDeJog = Convert.ToInt32(dr2["numDeJog"]);
+                    List<PlayerGame> Time1 = new List<PlayerGame>();
+                    List<PlayerGame> Time2 = new List<PlayerGame>();
+                    DataSet ds3 = AcessData.GetData("select goleiro, gols, golscontra, assistencias, player_id, nickname, [time] from playergame pg inner join player p on p.id = pg.player_id  where game_id = " + g.id + " order by pg.id");
+                    foreach (DataRow dr3 in ds3.Tables[0].Rows)
+                    {
+                        PlayerGame pGame = new PlayerGame();
+                        pGame.goleiro = bool.Parse(dr3["goleiro"].ToString());
+                        pGame.gols = Convert.ToInt32(dr3["gols"]);
+                        pGame.golsContra = Convert.ToInt32(dr3["golsContra"]);
+                        pGame.assistencias = Convert.ToInt32(dr3["assistencias"]);
+                        pGame.id = Convert.ToInt32(dr3["player_id"]);
+                        pGame.name = dr3["nickName"].ToString();
+                        int time = Convert.ToInt32(dr3["time"]);
+
+                        if (pGame.goleiro && time == 1)
+                        {
+                            g.goleiroTime1 = pGame;
+                        }
+                        else if (pGame.goleiro && time == 2)
+                        {
+                            g.goleiroTime2 = pGame;
+                        }
+                        else if (time == 1)
+                        {
+                            Time1.Add(pGame);
+                        }
+                        else if (time == 2)
+                        {
+                            Time2.Add(pGame);
+                        }
+                    }
+                    g.time1 = Time1;
+                    g.time2 = Time2;
+                    jogosFinalizados.Add(g);
+                }
+                gDay.jogosFinalizados = jogosFinalizados;
+                ret.Add(gDay);
+            }
+            return ret;
+        }
+
+
+
         public static List<GameDay> getAllGames()
         {
             List<GameDay> ret = new List<GameDay>();
-            DataSet ds = AcessData.GetData("select top 3 * from gameday order by gameDate desc");
+            DataSet ds = AcessData.GetData("select * from gameday order by gameDate desc");
 
             foreach(DataRow dr in ds.Tables[0].Rows)
             {
