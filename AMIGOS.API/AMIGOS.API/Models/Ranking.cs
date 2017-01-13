@@ -21,5 +21,6 @@ namespace AMIGOS.API.Models
         public int gc { get; set; }
         public int dias { get; set; }
         public bool ranking { get; set; }
+        public bool goleiro { get; set; }
     }
 }

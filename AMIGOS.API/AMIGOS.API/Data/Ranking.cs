@@ -32,9 +32,28 @@ namespace AMIGOS.API.Data
                 r.gc = Convert.ToInt32(dr["gc"]);
                 r.dias = Convert.ToInt32(dr["dias"]);
                 r.ranking = Convert.ToBoolean(dr["ranking"]);
-
                 ret.Add(r);
             }
+            DataSet dsg = AcessData.GetData("select *, case when dias > ((select * from gamesInsemester) * 0.25) then 1 else 0 end as ranking from rankingByCurrentSemesterGoalkeeper()");
+            foreach (DataRow dr in dsg.Tables[0].Rows)
+            {
+                RankingPlayer r = new RankingPlayer();
+                r.player_id = Convert.ToInt32(dr["player_id"]);
+                r.Peladeiro = dr["Peladeiro"].ToString();
+                r.Pontos = Convert.ToInt32(dr["Pontos"]);
+                r.MediaPontos = Convert.ToDouble(dr["MediaPontos"]);
+                r.MediaGols = Convert.ToDouble(dr["MediaGols"]);
+                r.jogos = Convert.ToInt32(dr["jogos"]);
+                r.Vitorias = Convert.ToInt32(dr["Vitorias"]);
+                r.Empates = Convert.ToInt32(dr["Empates"]);
+                r.Derrotas = Convert.ToInt32(dr["Derrotas"]);
+                r.gc = Convert.ToInt32(dr["golssofridos"]);
+                r.dias = Convert.ToInt32(dr["dias"]);
+                r.ranking = Convert.ToBoolean(dr["ranking"]);
+                r.goleiro = true;
+                ret.Add(r);
+            }
+
             return ret;
         }
 
@@ -60,7 +79,26 @@ namespace AMIGOS.API.Data
                 r.gc = Convert.ToInt32(dr["gc"]);
                 r.dias = Convert.ToInt32(dr["dias"]);
                 r.ranking = Convert.ToBoolean(dr["ranking"]);
+                ret.Add(r);
+            }
 
+            DataSet dsg = AcessData.GetData("select *, case when dias > ((select gamesinyear from gamesInyear where [year] = " + year + ") * 0.25) then 1 else 0 end as ranking from rankingByYearGoalkeeper(" + year + ")");
+            foreach (DataRow dr in dsg.Tables[0].Rows)
+            {
+                RankingPlayer r = new RankingPlayer();
+                r.player_id = Convert.ToInt32(dr["player_id"]);
+                r.Peladeiro = dr["Peladeiro"].ToString();
+                r.Pontos = Convert.ToInt32(dr["Pontos"]);
+                r.MediaPontos = Convert.ToDouble(dr["MediaPontos"]);
+                r.MediaGols = Convert.ToDouble(dr["MediaGols"]);
+                r.jogos = Convert.ToInt32(dr["jogos"]);
+                r.Vitorias = Convert.ToInt32(dr["Vitorias"]);
+                r.Empates = Convert.ToInt32(dr["Empates"]);
+                r.Derrotas = Convert.ToInt32(dr["Derrotas"]);
+                r.gc = Convert.ToInt32(dr["golssofridos"]);
+                r.dias = Convert.ToInt32(dr["dias"]);
+                r.ranking = Convert.ToBoolean(dr["ranking"]);
+                r.goleiro = true;
                 ret.Add(r);
             }
             return ret;
