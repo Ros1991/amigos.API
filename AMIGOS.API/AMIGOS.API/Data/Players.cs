@@ -29,6 +29,7 @@ namespace AMIGOS.API.Data
                 plr.Phone = dr["Phone"].ToString();
                 plr.Position = dr["Position"].ToString();
                 plr.Picture = dr["Picture"].ToString();
+                plr.Torcida = dr["Torcida"].ToString();
                 if (!(dr["Subscriber"] is System.DBNull)) plr.Subscriber = bool.Parse(dr["Subscriber"].ToString());
 
                 ret.Add(plr);
@@ -50,6 +51,7 @@ namespace AMIGOS.API.Data
             plr.Phone = dr["Phone"].ToString();
             plr.Position = dr["Position"].ToString();
             plr.Picture = dr["Picture"].ToString();
+            plr.Torcida = dr["Torcida"].ToString();
             if (!(dr["Subscriber"] is System.DBNull)) plr.Subscriber = bool.Parse(dr["Subscriber"].ToString());
             return plr;
         }
@@ -79,6 +81,7 @@ namespace AMIGOS.API.Data
             commandString += ",[Name] = " + (!string.IsNullOrEmpty(plr.Name) ? "'" + plr.Name + "'" : "null");
             commandString += ",[Email] = " + (!string.IsNullOrEmpty(plr.Email) ? "'" + plr.Email + "'" : "null");
             commandString += ",[Phone] = " + (!string.IsNullOrEmpty(plr.Phone) ? "'" + plr.Phone + "'" : "null");
+            commandString += ",[Torcida] = " + (!string.IsNullOrEmpty(plr.Torcida) ? "'" + plr.Torcida + "'" : "null");
             commandString += ",[Position] = " + (!string.IsNullOrEmpty(plr.Position) ? "'" + plr.Position + "'" : "null");
             commandString += ",[Picture] = " + (!string.IsNullOrEmpty(plr.Picture) ? "'" + plr.Picture + "'" : "null");
             commandString += ",[Subscriber] = " + Convert.ToInt16(plr.Subscriber).ToString();
@@ -107,6 +110,7 @@ namespace AMIGOS.API.Data
             if (!string.IsNullOrEmpty(plr.Name)) commandString += ",[Name]";
             if (!string.IsNullOrEmpty(plr.Email)) commandString += ",[Email]";
             if (!string.IsNullOrEmpty(plr.Phone)) commandString += ",[Phone]";
+            if (!string.IsNullOrEmpty(plr.Phone)) commandString += ",[Torcida]";
             if (!string.IsNullOrEmpty(plr.Position)) commandString += ",[Position]";
             if (!string.IsNullOrEmpty(plr.Picture)) commandString += ",[Picture]";
             if (plr.Subscriber) commandString += ",[Subscriber]";
@@ -117,6 +121,7 @@ namespace AMIGOS.API.Data
             if (!string.IsNullOrEmpty(plr.Name)) commandString += ",'" + plr.Name + "'";
             if (!string.IsNullOrEmpty(plr.Email)) commandString += ",'" + plr.Email + "'";
             if (!string.IsNullOrEmpty(plr.Phone)) commandString += ",'" + plr.Phone + "'";
+            if (!string.IsNullOrEmpty(plr.Torcida)) commandString += ",'" + plr.Torcida + "'";
             if (!string.IsNullOrEmpty(plr.Position)) commandString += ",'" + plr.Position + "'";
             if (!string.IsNullOrEmpty(plr.Picture)) commandString += ",'" + plr.Picture + "'";
             if (plr.Subscriber) commandString += "," + Convert.ToInt16(plr.Subscriber).ToString();

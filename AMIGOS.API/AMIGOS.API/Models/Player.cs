@@ -17,5 +17,6 @@ namespace AMIGOS.API.Models
         public string Position { get; set; }
         public string Picture { get; set; }
         public bool Subscriber  { get; set; }
+        public string Torcida { get; set; }
     }
 }
